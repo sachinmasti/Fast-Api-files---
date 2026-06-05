@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Amit Sharma",
+    "age": 32,
+    "gender": "Male",
+    "diagnosis": "Diabetes",
+    "admission_date": "2026-05-20"
+  },
+  {
+    "id": 2,
+    "name": "Priya Desai",
+    "age": 28,
+    "gender": "Female",
+    "diagnosis": "Asthma",
+    "admission_date": "2026-05-21"
+  },
+  {
+    "id": 3,
+    "name": "Ravi Patel",
+    "age": 45,
+    "gender": "Male",
+    "diagnosis": "Hypertension",
+    "admission_date": "2026-05-22"
+  },
+  {
+    "id": 4,
+    "name": "Sneha Kulkarni",
+    "age": 36,
+    "gender": "Female",
+    "diagnosis": "Migraine",
+    "admission_date": "2026-05-23"
+  },
+  {
+    "id": 5,
+    "name": "Arjun Mehta",
+    "age": 50,
+    "gender": "Male",
+    "diagnosis": "Heart Disease",
+    "admission_date": "2026-05-24"
+  },
+  {
+    "id": 6,
+    "name": "Neha Joshi",
+    "age": 29,
+    "gender": "Female",
+    "diagnosis": "Thyroid",
+    "admission_date": "2026-05-25"
+  },
+  {
+    "id": 7,
+    "name": "Karan Singh",
+    "age": 40,
+    "gender": "Male",
+    "diagnosis": "Arthritis",
+    "admission_date": "2026-05-26"
+  },
+  {
+    "id": 8,
+    "name": "Meera Nair",
+    "age": 34,
+    "gender": "Female",
+    "diagnosis": "Anemia",
+    "admission_date": "2026-05-27"
+  },
+  {
+    "id": 9,
+    "name": "Suresh Reddy",
+    "age": 55,
+    "gender": "Male",
+    "diagnosis": "Kidney Disease",
+    "admission_date": "2026-05-28"
+  },
+  {
+    "id": 10,
+    "name": "Pooja Verma",
+    "age": 31,
+    "gender": "Female",
+    "diagnosis": "Allergy",
+    "admission_date": "2026-05-29"
+  }
+]
