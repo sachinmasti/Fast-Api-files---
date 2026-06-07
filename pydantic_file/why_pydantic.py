@@ -1,12 +1,32 @@
 from colorama import Fore,Style,init
 init(autoreset=True)
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator
+from typing import List,Dict,Any,Optional,Annotated
 
 
 class info(BaseModel):
-    name:str
-    age:int
-    salary:int
+    name : Annotated[str,Field(max_length=50,title='name of the patient',
+                    description='plz enter the name of the patient',examples=['sachin','rohit','shreya'])]
+
+    age : Annotated[int,Field(gt=0 , strict=True)]
+
+    email : EmailStr
+    booking_url: Optional[AnyUrl] = 'sachinmasti.www.com'
+    salary:float
+    weight:float
+    allergies: Optional[List[str]] = Field(max_length=5,default='not any allergies')
+    contact_info: Dict[str, Any]
+
+
+    @field_validator('email')
+    @classmethod
+    def validator(clf,value):
+        valid_inpute = ['google.com','meta.com','apple.com']
+        domain_value = value.split('@')[1]
+
+        if domain_value not in valid_inpute:
+            raise ValueError(f'inpute a valid email domains for ex {valid_inpute}')
+        return value
 
 # def sachin(name:str,age:int):
 #     '''iss type ke code main manually code likhana pada rahah hai
@@ -23,13 +43,31 @@ class info(BaseModel):
 # print(sachin('veena','twenty'))
 
 def func(info:info):
-    return (
-        f'my name is {Fore.CYAN} {info.name} {Style.RESET_ALL} '
-        f' and my age is {Fore.GREEN} {info.age} {Style.RESET_ALL} '
-        f' my salary is {Fore.LIGHTMAGENTA_EX} {info.salary}'
-    )
+    line1 = f' {Fore.BLUE} my name is {Fore.LIGHTCYAN_EX} {info.name} {Style.RESET_ALL}  and my age is\
+             {Fore.GREEN} {info.age} {Style.RESET_ALL}  my salary is {Fore.LIGHTMAGENTA_EX} {info.salary}'  
 
-user_info = {'name':'veena','age':20,'salary':500000}
+    line2 = f' {Fore.BLUE} my weight is {Fore.GREEN} {info.weight} '
+
+    line3 = f'{Fore.BLUE} my allergies is {Fore.YELLOW} {info.allergies} '
+
+    line4 = f'{Fore.BLUE} my contact number is {Fore.LIGHTRED_EX} {info.contact_info} '
+
+    lines5 = f'{Fore.BLUE} my email id is {Fore.LIGHTRED_EX} {info.email} '
+
+    lines6 = f'{Fore.BLUE} where i booked is {Fore.LIGHTWHITE_EX} {info.booking_url} '
+
+    return '\n'.join([line1, line2, line3, line4,lines5,lines6])
+
+user_info = {
+    'name': 'veena',
+    'age': 20,
+    'salary': 500000,
+    'weight': 44.50,
+    # 'allergies': ['dust', 'flue', 'heat'],
+    'email': 'sachinmasti98@google.com',
+    'booking_url': 'https://sachin.com',
+    'contact_info': {'sachin': 7666243552}
+}
 
 massage = info(**user_info)
 print(func(massage))
