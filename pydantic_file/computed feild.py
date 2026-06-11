@@ -1,7 +1,7 @@
 from colorama import Fore,Style,init
 init(autoreset=True)
 
-from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator
+from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator,model_validator,computed_field
 from typing import List,Dict,Any,Optional,Annotated
 
 
@@ -15,20 +15,21 @@ class info(BaseModel):
     booking_url: Optional[AnyUrl] = 'sachinmasti.www.com'
     salary:float
     weight:float
+    height:float
     allergies: Optional[List[str]] = Field(max_length=5,default='not any allergies')
     contact_info: Dict[str, Any]
 
+    @computed_field()
+    # @property
+    def bmi(self) ->float:
+        return round(self.weight * self.height)
 
-    @field_validator('email')
-    @classmethod
-    def validator(clf,value):
-        valid_inpute = ['google.com','meta.com','apple.com']
-        domain_value = value.split('@')[1]
 
-        if domain_value not in valid_inpute:
-            raise ValueError(f'inpute a valid email domains for ex {valid_inpute}')
-        return value
-
+    @model_validator(mode='after')
+    def validates(self):
+        if self.age >= 60 and 'emergency no' not in self.contact_info:
+            raise ValueError(f'{Fore.YELLOW} your age is grater than 60 so you have to be emergency contact nomber')
+        return self
 # def sachin(name:str,age:int):
 #     '''iss type ke code main manually code likhana pada rahah hai
 #         aur iss tarah bahot sa boiler code likhna padega agar data validation karna hai to
@@ -55,9 +56,11 @@ def func(info:info):
 
     lines5 = f'{Fore.BLUE} my email id is {Fore.LIGHTRED_EX} {info.email} '
 
-    lines6 = f'{Fore.BLUE} where i booked is {Fore.LIGHTWHITE_EX} {info.booking_url} '
+    lines6 = f'{Fore.BLUE} where i booked is {Fore.LIGHTWHITE_EX} {str(info.booking_url)} {Style.RESET_ALL}'
 
-    return '\n'.join([line1, line2, line3, line4,lines5,lines6])
+    lines7 = f'{Fore.BLUE} your bmi index is {info.bmi}'
+
+    return '\n'.join([line1, line2, line3, line4,lines5,lines6,lines7])
 
 user_info = {
     'name': 'veena',
@@ -65,6 +68,7 @@ user_info = {
     'salary': 500000,
     'weight': 44.50,
     # 'allergies': ['dust', 'flue', 'heat'],
+    'height': 5.6,
     'email': 'sachinmasti98@google.com',
     'booking_url': 'https://sachin.com',
     'contact_info': {'sachin': 7666243552}

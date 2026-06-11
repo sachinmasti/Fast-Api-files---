@@ -1,7 +1,7 @@
 from colorama import Fore,Style,init
 init(autoreset=True)
 
-from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator
+from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator,model_validator
 from typing import List,Dict,Any,Optional,Annotated
 
 
@@ -18,17 +18,11 @@ class info(BaseModel):
     allergies: Optional[List[str]] = Field(max_length=5,default='not any allergies')
     contact_info: Dict[str, Any]
 
-
-    @field_validator('email')
-    @classmethod
-    def validator(clf,value):
-        valid_inpute = ['google.com','meta.com','apple.com']
-        domain_value = value.split('@')[1]
-
-        if domain_value not in valid_inpute:
-            raise ValueError(f'inpute a valid email domains for ex {valid_inpute}')
-        return value
-
+    @model_validator(mode='after')
+    def validates(self):
+        if self.age >= 60 and 'emergency no' not in self.contact_info:
+            raise ValueError(f'{Fore.YELLOW} your age is grater than 60 so you have to be emergency contact nomber')
+        return self
 # def sachin(name:str,age:int):
 #     '''iss type ke code main manually code likhana pada rahah hai
 #         aur iss tarah bahot sa boiler code likhna padega agar data validation karna hai to

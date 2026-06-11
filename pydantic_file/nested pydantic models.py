@@ -1,8 +1,13 @@
 from colorama import Fore,Style,init
 init(autoreset=True)
 
-from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator
+from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator,model_validator
 from typing import List,Dict,Any,Optional,Annotated
+
+class addres_clf(BaseModel):
+    city: str
+    pincode: int
+    street: str
 
 
 class info(BaseModel):
@@ -17,18 +22,13 @@ class info(BaseModel):
     weight:float
     allergies: Optional[List[str]] = Field(max_length=5,default='not any allergies')
     contact_info: Dict[str, Any]
+    addres: addres_clf # Corrected: type hint for nested model
 
-
-    @field_validator('email')
-    @classmethod
-    def validator(clf,value):
-        valid_inpute = ['google.com','meta.com','apple.com']
-        domain_value = value.split('@')[1]
-
-        if domain_value not in valid_inpute:
-            raise ValueError(f'inpute a valid email domains for ex {valid_inpute}')
-        return value
-
+    @model_validator(mode='after')
+    def validates(self):
+        if self.age >= 60 and 'emergency no' not in self.contact_info:
+            raise ValueError(f'{Fore.YELLOW} your age is grater than 60 so you have to be emergency contact nomber')
+        return self
 # def sachin(name:str,age:int):
 #     '''iss type ke code main manually code likhana pada rahah hai
 #         aur iss tarah bahot sa boiler code likhna padega agar data validation karna hai to
@@ -55,9 +55,11 @@ def func(info:info):
 
     lines5 = f'{Fore.BLUE} my email id is {Fore.LIGHTRED_EX} {info.email} '
 
-    lines6 = f'{Fore.BLUE} where i booked is {Fore.LIGHTWHITE_EX} {info.booking_url} '
+    lines6 = f'{Fore.BLUE} where i booked is {Fore.LIGHTWHITE_EX} {str(info.booking_url)} ' # Corrected: removed trailing comma
 
-    return '\n'.join([line1, line2, line3, line4,lines5,lines6])
+    lines7 = f'my address is {info.addres.street}, {info.addres.city}, {info.addres.pincode}' # Corrected: access attributes
+
+    return '\n'.join([line1, line2, line3, line4,lines5,lines6,lines7])
 
 user_info = {
     'name': 'veena',
@@ -67,10 +69,13 @@ user_info = {
     # 'allergies': ['dust', 'flue', 'heat'],
     'email': 'sachinmasti98@google.com',
     'booking_url': 'https://sachin.com',
-    'contact_info': {'sachin': 7666243552}
+    'contact_info': {'sachin': 7666243552},
+    'addres': {'city':'delhi','pincode':1223,'street':'karolbag'}
 }
+
 
 massage = info(**user_info)
 
 
 print(func(massage))
+print(f'pin code is  {massage.addres.pincode}')
