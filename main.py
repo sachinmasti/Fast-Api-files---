@@ -92,3 +92,4 @@ def get_plot():
     df = load_df()
     buf = bar_plot(df)
     return StreamingResponse(buf, media_type='image/png')
+
